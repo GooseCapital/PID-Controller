@@ -5,34 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PID_Controller"
         mc:Ignorable="d"
-        Title="PID Controller" Height="450" Width="800" Loaded="Window_Loaded" Closing="Window_Closing">
+        Title="Giám sát nhiệt độ, độ ẩm" Height="316.5" Width="645" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid>
-
-        <local:LineCharts Margin="10,108,16,10" x:Name="LineCharts"></local:LineCharts>
-        <GroupBox Header="Bảng điều khiển" HorizontalAlignment="Left" Height="93" Margin="10,10,0,0" VerticalAlignment="Top" Width="304">
+        <GroupBox Header="Bảng điều khiển" HorizontalAlignment="Left" Height="66" Margin="10,10,0,0" VerticalAlignment="Top" Width="397">
             <Grid>
                 <ComboBox x:Name="CbComPort" HorizontalAlignment="Left" Margin="68,10,0,0" VerticalAlignment="Top" Width="120"/>
-                <Button x:Name="BtnRefreshCom" Content="Refresh" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" Width="74" Click="BtnRefreshCom_Click" Height="22"/>
-                <Button x:Name="BtnConnect" Content="Connect" HorizontalAlignment="Left" Margin="104,39,0,0" VerticalAlignment="Top" Width="76" Click="BtnConnect_Click" Height="22"/>
+                <Button x:Name="BtnRefreshCom" Content="Refresh" HorizontalAlignment="Left" Margin="301,10,0,0" VerticalAlignment="Top" Width="74" Click="BtnRefreshCom_Click" Height="22"/>
+                <Button x:Name="BtnConnect" Content="Connect" HorizontalAlignment="Left" Margin="207,10,0,0" VerticalAlignment="Top" Width="76" Click="BtnConnect_Click" Height="22" RenderTransformOrigin="2.526,-0.364"/>
                 <Label Content="ComPort" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top"/>
-                <TextBlock HorizontalAlignment="Left" Margin="200,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Tốc độ:"/>
-                <TextBlock x:Name="LbSpeed" HorizontalAlignment="Left" Margin="244,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-                <Button x:Name="BtnPWM" Content="PWM" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="200,41,0,0" Click="BtnPWM_Click"/>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Thông số" HorizontalAlignment="Left" Height="93" Margin="314,10,0,0" VerticalAlignment="Top" Width="462" RenderTransformOrigin="-0.278,-0.517">
+        <GroupBox Header="Thông tin" HorizontalAlignment="Left" Height="66" Margin="412,10,0,0" VerticalAlignment="Top" Width="214">
             <Grid>
-                <Label Content="Kd" HorizontalAlignment="Left" Margin="198,38,0,0" VerticalAlignment="Top" RenderTransformOrigin="0,-0.603"/>
-                <Label Content="Kp" HorizontalAlignment="Left" Margin="198,7,0,0" VerticalAlignment="Top" RenderTransformOrigin="0,-0.603"/>
-                <Label Content="Ki" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" RenderTransformOrigin="0,-0.603"/>
-                <Label Content="Tốc độ" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top" RenderTransformOrigin="0,-0.603"/>
-                <TextBox x:Name="TbSpeed" HorizontalAlignment="Left" Height="23" Margin="61,11,0,0" TextWrapping="Wrap" Text="800" VerticalAlignment="Top" Width="120" PreviewTextInput="HandleDoubleInput"/>
-                <TextBox x:Name="TbKp" HorizontalAlignment="Left" Height="23" Margin="227,11,0,0" TextWrapping="Wrap" Text="0.271" VerticalAlignment="Top" Width="120" PreviewTextInput="HandleDoubleInput"/>
-                <TextBox x:Name="TbKi" HorizontalAlignment="Left" Height="23" Margin="61,41,0,0" TextWrapping="Wrap" Text="0.45" VerticalAlignment="Top" Width="120" PreviewTextInput="HandleDoubleInput"/>
-                <TextBox x:Name="TbKd" HorizontalAlignment="Left" Height="23" Margin="227,41,0,0" TextWrapping="Wrap" Text="0.1" VerticalAlignment="Top" Width="120" PreviewTextInput="HandleDoubleInput"/>
-                <Button x:Name="BtnDefaultParam" Content="Default" HorizontalAlignment="Left" Margin="365,10,0,0" VerticalAlignment="Top" Width="75" Click="BtnDefaultParam_Click"/>
-                <Button x:Name="BtnChangeParam" Content="Change" HorizontalAlignment="Left" Margin="365,44,0,0" VerticalAlignment="Top" Width="75" Click="BtnChangeParam_Click"/>
+                <TextBlock HorizontalAlignment="Left" Margin="10,14,0,0" TextWrapping="Wrap" Text="Nhiệt độ:" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" Margin="118,14,0,0" TextWrapping="Wrap" Text="Độ ẩm:" VerticalAlignment="Top" RenderTransformOrigin="3.184,0.562"/>
+                <TextBlock x:Name="LbTemperature" HorizontalAlignment="Left" Margin="66,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                <TextBlock x:Name="LbHumidity" HorizontalAlignment="Left" Margin="162,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="3.184,0.562"/>
             </Grid>
         </GroupBox>
+        <ListView Name="ListViewTemp" HorizontalAlignment="Left" Height="194" Margin="10,81,0,0" VerticalAlignment="Top" Width="616">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Thời gian" Width="150" DisplayMemberBinding="{Binding Time}"/>
+                    <GridViewColumn Header="Nhiệt độ" Width="100" DisplayMemberBinding="{Binding Temperature}"/>
+                    <GridViewColumn Header="Độ ẩm" Width="100" DisplayMemberBinding="{Binding Humidity}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>

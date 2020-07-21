@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO.Ports;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using PID_Controller.Model;
 
 namespace PID_Controller
 {
@@ -13,6 +16,10 @@ namespace PID_Controller
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static double CurrentTemperature = 0;
+        public static double CurrentHumidity = 0;
+        public ObservableCollection<DataListView> DataListViews = new ObservableCollection<DataListView>();
+        
         public MainWindow()
         {
             //Init timer to upload opening status
@@ -22,6 +29,8 @@ namespace PID_Controller
             dispatcherTimer.Start();
             InitializeComponent();
             SerialPort.DataReceived += DataReceive; //add DataReceived event in Serial Port
+            ListViewTemp.ItemsSource = DataListViews;
+
         }
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
@@ -83,25 +92,33 @@ namespace PID_Controller
                             return;
                         }
 
-                        Dispatcher.Invoke(() => { LbSpeed.Text = value[0].ToString(); });
-
-                        //add value to collection
-                        LineCharts.SeriesCollection[0].Values.Add(new DateModel()
-                        {
-                            DateTime = DateTime.Now,
-                            Value = value[0]
-                        });
-                        if (LineCharts.SeriesCollection[0].Values.Count > 50)
-                            LineCharts.SeriesCollection[0].Values.RemoveAt(0);
-
-                        //Add pwm chart
-                        PwmWindows.AddPwmData(value[1]);
+                        Dispatcher.Invoke(() => { LbTemperature.Text = $@"{value[1].ToString()}°C"; });
+                        Dispatcher.Invoke(() => { LbHumidity.Text = $@"{value[0].ToString()}%"; });
+                        AddItemInList(value);
+                        CurrentTemperature = value[1];
+                        CurrentHumidity = value[0];
                     }
                 }
-                catch
+                catch (Exception exception)
                 {
 
                 }
+            }
+        }
+
+        private void AddItemInList(double[] valueDoubles)
+        {
+            if (CurrentHumidity != valueDoubles[0] || CurrentTemperature != valueDoubles[1])
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    DataListViews.Add(new DataListView()
+                    {
+                        Humidity = valueDoubles[0],
+                        Temperature = valueDoubles[1],
+                        Time = DateTime.Now.ToLongTimeString()
+                    });
+                });
             }
         }
 
@@ -142,7 +159,6 @@ namespace PID_Controller
             IsPortOpening = false;
             BtnRefreshCom.IsEnabled = true;
             BtnConnect.Content = "Connect";
-            BtnChangeParam.IsEnabled = false;
         }
 
         private void OpenPortJob()
@@ -151,7 +167,6 @@ namespace PID_Controller
             IsPortOpening = true;
             BtnRefreshCom.IsEnabled = false;
             BtnConnect.Content = "Disconnect";
-            BtnChangeParam.IsEnabled = true;
         }
 
         private void BtnConnect_Click(object sender, RoutedEventArgs e)
@@ -199,41 +214,7 @@ namespace PID_Controller
         {
             BtnRefreshCom.PerformClick();
         }
-
-        private void HandleDoubleInput(object sender, TextCompositionEventArgs e)
-        {
-            bool approvedDecimalPoint = false;
-
-            if (e.Text == ".")
-            {
-                if (!((TextBox)sender).Text.Contains("."))
-                    approvedDecimalPoint = true;
-            }
-
-            if (!(char.IsDigit(e.Text, e.Text.Length - 1) || approvedDecimalPoint))
-                e.Handled = true;
-        }
-
-        private void BtnDefaultParam_Click(object sender, RoutedEventArgs e)
-        {
-            TbKp.Text = "0.013";
-            TbKi.Text = "1.2";
-            TbKd.Text = "0.038";
-        }
-
-        private void BtnChangeParam_Click(object sender, RoutedEventArgs e)
-        {
-            if (IsPortOpening)
-            {
-                SerialPort.WriteLine($"setup|{TbSpeed.Text}|{TbKp.Text}|{TbKi.Text}|{TbKd.Text}|");
-            }
-            else
-            {
-                MessageBox.Show("Vui lòng Open Port trước khi chỉnh thông số", "Thông báo", MessageBoxButton.OK,
-                    MessageBoxImage.Asterisk);
-            }
-        }
-
+        
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Task.Run(() => { SerialPort.Close(); }); // Use Asynchronous to prevent deadlock 
@@ -242,10 +223,6 @@ namespace PID_Controller
             PwmWindows.Close();
         }
 
-        private void BtnPWM_Click(object sender, RoutedEventArgs e)
-        {
-            PwmWindows.Show();
-        }
     }
     public static class MyExt
     {

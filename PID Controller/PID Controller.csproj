@@ -64,6 +64,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\DataListView.cs" />
     <Compile Include="PWMWindows.xaml.cs">
       <DependentUpon>PWMWindows.xaml</DependentUpon>
     </Compile>
@@ -126,5 +127,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
