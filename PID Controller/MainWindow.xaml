@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PID_Controller"
         mc:Ignorable="d"
-        Title="Giám sát nhiệt độ, độ ẩm" Height="316.5" Width="645" Loaded="Window_Loaded" Closing="Window_Closing">
+        Title="Giám sát nhiệt độ, độ ẩm" Height="411.5" Width="686" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid>
         <GroupBox Header="Bảng điều khiển" HorizontalAlignment="Left" Height="66" Margin="10,10,0,0" VerticalAlignment="Top" Width="397">
             <Grid>
@@ -15,7 +15,7 @@
                 <Label Content="ComPort" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top"/>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Thông tin" HorizontalAlignment="Left" Height="66" Margin="412,10,0,0" VerticalAlignment="Top" Width="214">
+        <GroupBox Header="Thông tin" HorizontalAlignment="Left" Height="66" Margin="412,10,0,0" VerticalAlignment="Top" Width="256">
             <Grid>
                 <TextBlock HorizontalAlignment="Left" Margin="10,14,0,0" TextWrapping="Wrap" Text="Nhiệt độ:" VerticalAlignment="Top"/>
                 <TextBlock HorizontalAlignment="Left" Margin="118,14,0,0" TextWrapping="Wrap" Text="Độ ẩm:" VerticalAlignment="Top" RenderTransformOrigin="3.184,0.562"/>
@@ -23,7 +23,7 @@
                 <TextBlock x:Name="LbHumidity" HorizontalAlignment="Left" Margin="162,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="3.184,0.562"/>
             </Grid>
         </GroupBox>
-        <ListView Name="ListViewTemp" HorizontalAlignment="Left" Height="194" Margin="10,81,0,0" VerticalAlignment="Top" Width="616">
+        <ListView Name="ListViewTemp" HorizontalAlignment="Left" Height="290" Margin="10,81,0,0" VerticalAlignment="Top" Width="352">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Thời gian" Width="150" DisplayMemberBinding="{Binding Time}"/>
@@ -32,5 +32,6 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <local:LineCharts x:Name="Charts" HorizontalAlignment="Left" Height="290" Margin="367,81,0,0" VerticalAlignment="Top" Width="301"/>
     </Grid>
 </Window>

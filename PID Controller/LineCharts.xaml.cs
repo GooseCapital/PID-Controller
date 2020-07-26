@@ -21,9 +21,15 @@ namespace PID_Controller
             {
                 new LineSeries
                 {
-                    Title = "Tốc độ",
+                    Title = "Nhiệt độ",
                     Values = new ChartValues<DateModel> {  },
-                    PointGeometry = null
+                    
+                }
+                ,
+                new LineSeries
+                {
+                    Title = "Độ ẩm",
+                    Values = new ChartValues<DateModel> {  },
                 }
             };
 

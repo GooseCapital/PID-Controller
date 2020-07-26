@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
 using System.IO.Ports;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
 using PID_Controller.Model;
 
 namespace PID_Controller
@@ -19,7 +23,6 @@ namespace PID_Controller
         public static double CurrentTemperature = 0;
         public static double CurrentHumidity = 0;
         public ObservableCollection<DataListView> DataListViews = new ObservableCollection<DataListView>();
-        
         public MainWindow()
         {
             //Init timer to upload opening status
@@ -29,7 +32,6 @@ namespace PID_Controller
             dispatcherTimer.Start();
             InitializeComponent();
             SerialPort.DataReceived += DataReceive; //add DataReceived event in Serial Port
-            ListViewTemp.ItemsSource = DataListViews;
 
         }
         private void dispatcherTimer_Tick(object sender, EventArgs e)
@@ -44,7 +46,6 @@ namespace PID_Controller
             }
         }
 
-        public PWMWindows PwmWindows = new PWMWindows();
         public bool IsPortOpening = false;
         public SerialPort SerialPort = new SerialPort();
 
@@ -106,20 +107,47 @@ namespace PID_Controller
             }
         }
 
+        private void SaveData(double[] value)
+        {
+            File.AppendAllText("data.txt",
+                $@"{value[1]}|{value[0]}|{DateTime.Now:dd/MM/yyyy hh:mm:ss tt}{Environment.NewLine}");
+        }
+
         private void AddItemInList(double[] valueDoubles)
         {
             if (CurrentHumidity != valueDoubles[0] || CurrentTemperature != valueDoubles[1])
             {
+                SaveData(valueDoubles);
                 Dispatcher.Invoke(() =>
                 {
+                    AddChartValue(valueDoubles[1], valueDoubles[0]);
                     DataListViews.Add(new DataListView()
                     {
                         Humidity = valueDoubles[0],
                         Temperature = valueDoubles[1],
-                        Time = DateTime.Now.ToLongTimeString()
+                        Time = DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss tt")
                     });
                 });
             }
+        }
+
+        public void AddChartValue(double temperature, double humidity)
+        {
+            //add value to collection
+            Charts.SeriesCollection[0].Values.Add(new DateModel()
+            {
+                DateTime = DateTime.Now,
+                Value = temperature
+            });
+            Charts.SeriesCollection[1].Values.Add(new DateModel()
+            {
+                DateTime = DateTime.Now,
+                Value = humidity
+            });
+            if (Charts.SeriesCollection[0].Values.Count > 10)
+                Charts.SeriesCollection[0].Values.RemoveAt(0);
+            if (Charts.SeriesCollection[1].Values.Count > 10)
+                Charts.SeriesCollection[1].Values.RemoveAt(0);
         }
 
         /// <summary>
@@ -213,6 +241,8 @@ namespace PID_Controller
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             BtnRefreshCom.PerformClick();
+            DataListViews = new ObservableCollection<DataListView>(DataListView.GetHistory());
+            ListViewTemp.ItemsSource = DataListViews;
         }
         
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -220,7 +250,6 @@ namespace PID_Controller
             Task.Run(() => { SerialPort.Close(); }); // Use Asynchronous to prevent deadlock 
             ClosePortJob();
             Thread.Sleep(500);
-            PwmWindows.Close();
         }
 
     }
