@@ -67,7 +67,7 @@ namespace PID_Controller
             }
             catch
             {
-               
+               //ignored
             }
         }
 
@@ -102,7 +102,7 @@ namespace PID_Controller
                 }
                 catch (Exception exception)
                 {
-
+                    //ignored
                 }
             }
         }
