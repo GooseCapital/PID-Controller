@@ -1,9 +1,9 @@
-﻿<Window x:Class="PID_Controller.MainWindow"
+﻿<Window x:Class="Temperature_Controller.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PID_Controller"
+        xmlns:local="clr-namespace:Temperature_Controller"
         mc:Ignorable="d"
         Title="Giám sát nhiệt độ, độ ẩm" Height="411.5" Width="686" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid>

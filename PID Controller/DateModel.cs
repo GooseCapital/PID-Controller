@@ -1,4 +1,4 @@
-﻿namespace PID_Controller
+﻿namespace Temperature_Controller
 {
     public class DateModel
     {

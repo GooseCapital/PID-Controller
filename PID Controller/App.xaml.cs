@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace PID_Controller
+namespace Temperature_Controller
 {
     /// <summary>
     /// Interaction logic for App.xaml

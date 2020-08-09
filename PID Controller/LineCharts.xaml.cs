@@ -1,10 +1,10 @@
-﻿using LiveCharts;
+﻿using System;
+using System.Windows.Controls;
+using LiveCharts;
 using LiveCharts.Configurations;
 using LiveCharts.Wpf;
-using System;
-using System.Windows.Controls;
 
-namespace PID_Controller
+namespace Temperature_Controller
 {
     /// <summary>
     /// Interaction logic for LineCharts.xaml

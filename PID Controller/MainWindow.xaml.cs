@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
 using System.IO.Ports;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using PID_Controller.Model;
+using Temperature_Controller.Model;
 
-namespace PID_Controller
+namespace Temperature_Controller
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -115,7 +110,7 @@ namespace PID_Controller
 
         private void AddItemInList(double[] valueDoubles)
         {
-            if (CurrentHumidity != valueDoubles[0] || CurrentTemperature != valueDoubles[1])
+            if (Math.Abs(CurrentHumidity - valueDoubles[0]) > 0.01 || Math.Abs(CurrentTemperature - valueDoubles[1]) > 0.01)
             {
                 SaveData(valueDoubles);
                 Dispatcher.Invoke(() =>
